@@ -39,11 +39,13 @@ export default function App() {
         if (!isCancelled) {
           setActivePdfBuffer(sampleBuf);
           setActiveFileName('Surat_Perjanjian_Kerjasama_2026.pdf');
-          setIsLoadingInitialDoc(false);
         }
       } catch (err) {
         console.error('Failed to init sample doc:', err);
-        if (!isCancelled) setIsLoadingInitialDoc(false);
+      } finally {
+        if (!isCancelled) {
+          setIsLoadingInitialDoc(false);
+        }
       }
     }
     init();

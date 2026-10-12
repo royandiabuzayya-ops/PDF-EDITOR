@@ -2,15 +2,18 @@
  * PDF Renderer service using pdfjs-dist to render pages onto HTML5 canvas.
  */
 import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-// Configure worker source to avoid bundler worker path resolution issues
-// Use unpkg or cdnjs matching installed version or fallback
+// Configure worker source using locally bundled Vite asset URL
 if (typeof window !== 'undefined') {
   try {
-    // Set standard cdn worker fallback
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version || '4.0.379'}/build/pdf.worker.min.mjs`;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
   } catch (e) {
-    console.warn('Could not set pdf workerSrc directly:', e);
+    try {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version || '4.0.379'}/build/pdf.worker.min.mjs`;
+    } catch {
+      // ignore
+    }
   }
 }
 
